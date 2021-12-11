@@ -23,7 +23,6 @@ export class CrudService<T> {
             }else {
                 response = await this.api.post<T>(this.extraPath(`${extraPath}`), requestBody);
             }
-            console.log(response);
             return response.data;
         } catch (error) {
             console.error(error);
