@@ -15,8 +15,16 @@ export default StyleSheet.create({
         fontSize: 20,
         textAlign: 'justify'
     },
-
-    owner: {
+    price: {
+        fontSize: 15,
+        textAlign: 'justify'
+    },
+    factory: {
+        fontSize: 18,
+        textAlign: 'justify'
+    },
+    amount: {
+        fontSize: 15,
         color: 'gray',
         textAlign: 'right'
     }

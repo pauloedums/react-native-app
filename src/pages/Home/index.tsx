@@ -1,13 +1,12 @@
-import { Ionicons } from '@expo/vector-icons';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { FlatList, Text, View } from 'react-native';
-import ProductItem from '../../components/ProductItem';
-import { Product } from '../../interfaces/product.interface';
+import { IProduct } from '../../interfaces/product.interface';
 import storage from '../../repositories/storage';
 import { TypeRoutes } from '../../routes';
 import { productService } from '../../services/product.service';
+import ProductItem from '../../shared/components/ProductItem';
 import styles from './styles';
 
 
@@ -15,21 +14,12 @@ export default function Home() {
 
     const navigation = useNavigation<NavigationProp<TypeRoutes>>();
 
-    const [products, setProducts] = React.useState<Product[]>();
+    const [products, setProducts] = React.useState<IProduct[]>();
     const [ refreshing, setRefreshing ] = React.useState(false);
 
     React.useEffect(() => {
 
         fetchPosts();
-
-        navigation.setOptions({
-            headerRight: () => (
-                <Ionicons
-                    name="add-circle" size={28} color="blue" onPress={createPost}
-                />
-            )
-        });
-
     }, []);
 
     function fetchPosts() {
@@ -49,10 +39,6 @@ export default function Home() {
                 navigation.goBack();
             }
         });
-    }
-
-    function createPost() {
-        navigation.navigate('Product');
     }
 
     if (!products) return <Text>Carregando...</Text>

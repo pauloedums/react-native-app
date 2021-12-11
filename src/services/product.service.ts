@@ -1,7 +1,7 @@
-import { Product } from './../interfaces/product.interface';
+import { IProduct } from './../interfaces/product.interface';
 import { CrudService } from '../shared/crud.service';
 
-class ProductService extends CrudService<Product> {
+class ProductService extends CrudService<IProduct> {
 
     constructor(){
         super('/product');
@@ -9,16 +9,16 @@ class ProductService extends CrudService<Product> {
 
     public async getProducts(token: string) {
         try {
-            return await this.readAll('/list');
+            return await this.readAll('list');
         } catch (error) {
             console.error(error);
             return null;
         }
     }
 
-    public async createProduct(token: string, body: Product) {
+    public async createProduct(token: string, body: IProduct) {
         try {
-            return await this.create(body, '/add');
+            return await this.create(body, 'add');
         } catch (error) {
             console.error(error);
             return null;
@@ -27,7 +27,7 @@ class ProductService extends CrudService<Product> {
 
     public async deleteProduct(token: string, idToDelete: string) {
         try {
-            return await this.delete(idToDelete, '/remove');
+            return await this.delete(idToDelete, 'remove');
         } catch (error) {
             console.error(error);
             return null;

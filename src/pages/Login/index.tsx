@@ -1,22 +1,22 @@
-import React from 'react';
-import { Button, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-
+import React from 'react';
+import { Button, View } from 'react-native';
+import { ILogin } from '../../interfaces/login.interface';
 import storage from '../../repositories/storage';
-import MyTextInput from '../../components/MyTextInput';
-import { loginService } from '../../services/login.service';
 import { TypeRoutes } from '../../routes';
-
-import styles from './styles';
-import { Login } from '../../interfaces/login.interface';
+import { loginService } from '../../services/login.service';
 import { userService } from '../../services/user.service';
+import MyTextInput from '../../shared/components/MyTextInput';
+import styles from './styles';
+
+
 
 export default function Login() {
 
     const navigation = useNavigation<NavigationProp<TypeRoutes>>();
 
-    const [email, setEmail] = React.useState('');
+    const [login, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
     React.useEffect(() => {
@@ -35,15 +35,15 @@ export default function Login() {
         navigation.navigate('SignUp');
     }
 
-    async function login() {
-        const login: Login = {
-            email,
+    async function logged() {
+        const loggedIn: ILogin = {
+            login,
             password
         }
-        const token: Login | string | null = await loginService.login(login);
-        if (token) {
-            // const user = await userService.getUser(token);
-            // await storage.save({ token, user });
+        const token: ILogin | string | null = await loginService.logged(loggedIn);
+        if ( typeof token === 'string') {
+            const user = await userService.getUser(token);
+            await storage.save({ token, user });
             navigation.navigate('Home');
         } else {
             alert('Login inválido!');
@@ -52,7 +52,7 @@ export default function Login() {
 
     return (
         <View style={styles.container}>
-            <MyTextInput title="E-mail:" value={email} onChangeText={setEmail} />
+            <MyTextInput title="E-mail:" value={login} onChangeText={setEmail} />
             
             <MyTextInput
                 title="Senha:"
@@ -61,7 +61,7 @@ export default function Login() {
                 onChangeText={setPassword}
             />
 
-            <Button title="Entrar" onPress={login} />
+            <Button title="Entrar" onPress={logged} />
         </View>
     );
 }

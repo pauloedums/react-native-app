@@ -2,13 +2,13 @@ import React from 'react';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { Button, Text, View } from "react-native";
 
-import MyTextInput from '../../components/MyTextInput';
+import MyTextInput from '../../shared/components/MyTextInput';
 import { TypeRoutes } from '../../routes';
 
 import styles from './styles';
-import { Login } from '../../interfaces/login.interface';
+import { ILogin } from '../../interfaces/login.interface';
 import { userService } from '../../services/user.service';
-import { Customer } from '../../interfaces/customer.interface';
+import { ICustomer } from '../../interfaces/customer.interface';
 
 export default function SignUp() {
 
@@ -35,18 +35,17 @@ export default function SignUp() {
             return;
         }
         
-        const user: Customer = {
+        const user: ICustomer = {
             email: email.toLowerCase(),
             name,
             address,
-            age,
+            age: parseInt(age),
             userPassword,
             
         };
-        
         const savedUser = await userService.createUser(user);
         try {
-            if (savedUser && savedUser.id) {
+            if (savedUser) {
                 navigation.goBack();
             } else {
                 alert('Usuário já existente!');

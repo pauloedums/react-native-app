@@ -17,12 +17,13 @@ export class CrudService<T> {
     public async create(requestBody: T, extraPath?:string){
         try {
             let response;
-            if(this.token){
+            if(this.token != null){
                 const config = this.createConfig(this.token);
-                response = await this.api.post<T>(this.extraPath(`${extraPath}`), { requestBody }, config);
+                response = await this.api.post<T>(this.extraPath(`${extraPath}`), requestBody, config);
             }else {
-                response = await this.api.post<T>(this.extraPath(`${extraPath}`), { requestBody });
+                response = await this.api.post<T>(this.extraPath(`${extraPath}`), requestBody);
             }
+            console.log(response);
             return response.data;
         } catch (error) {
             console.error(error);
@@ -64,9 +65,9 @@ export class CrudService<T> {
             let response;
             if(this.token){
                 const config = this.createConfig(this.token);
-                response = await this.api.put<T>(this.extraPath(`${extraPath}`), { requestBody }, config);
+                response = await this.api.put<T>(this.extraPath(`${extraPath}`), requestBody, config);
             }else {
-                response = await this.api.put<T>(this.extraPath(`${extraPath}`), { requestBody });
+                response = await this.api.put<T>(this.extraPath(`${extraPath}`), requestBody);
             }
             return response.data;
         } catch (error) {
