@@ -1,21 +1,22 @@
-import React from 'react';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { Button, Text, View } from "react-native";
-
-import MyTextInput from '../../shared/components/MyTextInput';
-import { TypeRoutes } from '../../routes';
-
-import styles from './styles';
-import { ILogin } from '../../interfaces/login.interface';
-import { userService } from '../../services/user.service';
+import { Box, Button, Center, ScrollView, View, VStack } from 'native-base';
+import React from 'react';
 import { ICustomer } from '../../interfaces/customer.interface';
+import { TypeRoutes } from '../../routes';
+import { userService } from '../../services/user.service';
+import MyTextInput from '../../shared/components/MyTextInput';
+import TitleSubtitle from './../../shared/components/TitleSubtitle';
+
+
 
 export default function SignUp() {
 
     const navigation = useNavigation<NavigationProp<TypeRoutes>>();
 
     React.useEffect(() => {
-        navigation.setOptions({ title: 'Novo Usuário' });
+        navigation.setOptions({ 
+            title: 'Novo Usuário'
+        });
     }, []);
 
     const [name, setName] = React.useState('');
@@ -57,19 +58,23 @@ export default function SignUp() {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Informe os dados do Usuário</Text>
+        <Center flex={1} _dark={{bg:'coolGray.800'}} _light={{bg:'warmGray.50'}}>
+            <ScrollView p="10" py="5" w="100%">
+                <Box safeArea p="2" py="10" pt="0" w="100%" maxW="100%">
+                    <VStack space={3} mt="5" alignContent="center">
+                        <TitleSubtitle title="Cadastro" subtitle="Informe os dados abaixo." />
+                    
+                        <MyTextInput title="Nome:" value={name} onChangeText={setName} />
+                        <MyTextInput title="Email:" value={email} onChangeText={setEmail} />
+                        <MyTextInput title="Endereço:" value={address} onChangeText={setAddress} />
+                        <MyTextInput title="Idade:" value={age} onChangeText={setAge} />
+                        <MyTextInput title="Senha:" value={userPassword} onChangeText={setPassword} secureTextEntry />
+                        <MyTextInput title="Confirmar senha:" value={confirmar} onChangeText={setConfirmar} secureTextEntry />
 
-            <MyTextInput title="Nome:" value={name} onChangeText={setName} />
-            
-            <MyTextInput title="Email:" value={email} onChangeText={setEmail} />
-            <MyTextInput title="Endereço:" value={address} onChangeText={setAddress} />
-            <MyTextInput title="Idade:" value={age} onChangeText={setAge} />
-
-            <MyTextInput title="Senha:" value={userPassword} onChangeText={setPassword} secureTextEntry />
-            <MyTextInput title="Confirmar senha:" value={confirmar} onChangeText={setConfirmar} secureTextEntry />
-
-            <Button title="Cadastrar" onPress={save} />
-        </View>
+                        <Button onPress={save} colorScheme="indigo" mt="5">Cadastrar</Button>
+                    </VStack>
+                </Box>
+            </ScrollView>
+        </Center>
     );
 }

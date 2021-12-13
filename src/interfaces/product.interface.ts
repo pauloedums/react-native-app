@@ -4,6 +4,7 @@ export interface IProduct{
     factory: ProductFactory;
     name: string;
     price: number;
+    image: string;
 }
 
 interface ProductFactory {
