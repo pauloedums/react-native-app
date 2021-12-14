@@ -1,4 +1,4 @@
-import { extendTheme, NativeBaseProvider, ScrollView } from 'native-base';
+import { Center, extendTheme, NativeBaseProvider, ScrollView } from 'native-base';
 import React from 'react';
 import Routes from './src/routes';
 
@@ -14,8 +14,7 @@ const customTheme = extendTheme({ config });
 export default function App() {
   return (
     <NativeBaseProvider theme={customTheme}>
-      
-        <Routes />
+      <Routes />
     </NativeBaseProvider>
   );
 }

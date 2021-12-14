@@ -1,12 +1,10 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { Box, Center, ScrollView, VStack } from 'native-base';
+import { Center, Heading, Spinner, VStack, FlatList, View, useToast } from 'native-base';
 import React from 'react';
-import { FlatList, Text, View } from 'react-native';
 import { IProduct } from '../../interfaces/product.interface';
 import storage from '../../repositories/storage';
 import { TypeRoutes } from '../../routes';
-import { imageService } from '../../services/image.service';
 import { productService } from '../../services/product.service';
 import ProductItem from '../../shared/components/ProductItem';
 
@@ -14,6 +12,10 @@ import ProductItem from '../../shared/components/ProductItem';
 export default function Home() {
 
     const navigation = useNavigation<NavigationProp<TypeRoutes>>();
+
+    const toast = useToast();
+    const idToastInvalid = "invalid-toast";
+    const idToastError = "error-toast";
 
     const [products, setProducts] = React.useState<IProduct[]>();
     const [ refreshing, setRefreshing ] = React.useState(false);
@@ -34,39 +36,57 @@ export default function Home() {
                     if (products) {
                         setProducts(products);
                     }
-                    else alert('Ocorreu um erro ao recuperar os celulares!');
+                    else {
+                        if(!toast.isActive(idToastError)) {
+                            toast.show({
+                                id: idToastError,
+                                title: "Ocorreu um erro!",
+                                status: "error",
+                                description: "Ao recuperar os celulares, não retornou nenhum, tente novamente!",
+                                isClosable: false,
+                            });
+                        }
+                    }
                 });
             } else {
                 setRefreshing(false);
-                alert('Sessão expirada!');
+
+                if(!toast.isActive(idToastInvalid)) {
+                    toast.show({
+                        id: idToastInvalid,
+                        title: "Sessão expirada!",
+                        status: "warning",
+                        isClosable: false,
+                    });
+                }
                 navigation.goBack();
             }
         });
     }
 
-
-    if (!products) return <Text>Carregando...</Text>
-
     return (
-        <Center _dark={{bg:'coolGray.800'}} _light={{bg:'warmGray.50'}}>
-            {/* <ScrollView p="10" py="5" w="100%"> */}
-                {/* <Box safeArea p="2" py="10" pt="0" w="100%" maxW="100%"> */}
-                    <VStack space={3} mt="5" alignContent="center">
-                        <View>
-                            <StatusBar style="auto" />
-                            
-                            <FlatList
-                                data={products}
-                                onRefresh={fetchPosts}
-                                refreshing={refreshing}
-                                renderItem={({ item }) => 
-                                <ProductItem product={item} />}
-                                keyExtractor={item => item.id ? item.id.toString() : ''}
-                            />
-                            </View>
-                    </VStack>
-                {/* </Box> */}
-            {/* </ScrollView> */}
+        <Center flex={1} _dark={{bg:'coolGray.800'}} _light={{bg:'warmGray.50'}}>
+            { !products ?
+                <VStack space={4} alignItems="center">
+                    <Heading textAlign="center" mb="10">
+                        Carregando celulares
+                    </Heading>
+                    <Spinner size="lg" />
+                </VStack> :
+                <VStack space={4} p="10" alignContent="center">
+                    <View>
+                        <StatusBar style="auto" />
+                        <FlatList
+                            data={products}
+                            onRefresh={fetchPosts}
+                            refreshing={refreshing}
+                            renderItem={({ item }) => 
+                            <ProductItem product={item} />}
+                            keyExtractor={item => item.id ? item.id.toString() : ''}
+                        />
+                    </View>
+                </VStack>
+            }   
         </Center>
     );
 }

@@ -25,11 +25,11 @@ function CustomNavigationBar({ navigation, back}) {
         <Appbar.Action icon="invert-colors" onPress={toggleColorMode} />
       </Appbar.Header>
     );
-  }
+}
 
 export default function Routes() {
     return (
-        <NavigationContainer>
+        <NavigationContainer >
             <Stack.Navigator
                 initialRouteName="Login"
                 screenOptions={{
