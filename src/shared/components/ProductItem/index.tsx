@@ -13,9 +13,10 @@ export default function ProductItem({ product }: Props) {
 
     const formattedQuery = (productName: string) => productName.replace(' ', '-').toLowerCase().trim();
     const [ refreshing, setRefreshing ] = React.useState(false);
+    const [ myProduct, setMyProduct ] = React.useState(product);
 
     React.useEffect(() => {
-        productImage(product);
+        productImage(myProduct);
     }, []);
     const numberFormat = 
         (value: number) => 
@@ -28,9 +29,13 @@ export default function ProductItem({ product }: Props) {
             ).format(value);
 
     async function productImage(product: IProduct){
-        setRefreshing(true);
+        
         const image = await imageService.read(formattedQuery(product.name));
-        product.image = image;
+        setMyProduct({
+          ...product,
+          image
+        });
+
     }
 
     return (
@@ -57,9 +62,8 @@ export default function ProductItem({ product }: Props) {
         <AspectRatio w="100%" ratio={16 / 9}>
           <Image
             source={{
-                uri: product.image
+                uri: myProduct.image
             }}
-            
           />
         </AspectRatio>
         <Center
@@ -77,13 +81,13 @@ export default function ProductItem({ product }: Props) {
           px="3"
           py="1.5"
         >
-          {product.factory.name}
+          {myProduct.factory.name}
         </Center>
       </Box>
       <Stack p="4" space={3}>
         <Stack space={2}>
           <Heading size="md" ml="-1">
-            {product.name}
+            {myProduct.name}
           </Heading>
           <Text
             fontSize="xs"
@@ -97,11 +101,11 @@ export default function ProductItem({ product }: Props) {
             ml="-0.5"
             mt="-1"
           >
-            Quantidade disponível: {product.amount}
+            Quantidade disponível: {myProduct.amount}
           </Text>
         </Stack>
         <Text fontWeight="400">
-          {numberFormat(product.price)}
+          {numberFormat(myProduct.price)}
         </Text>
       </Stack>
     </Box>

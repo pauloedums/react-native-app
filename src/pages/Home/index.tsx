@@ -74,9 +74,10 @@ export default function Home() {
                     <Spinner size="lg" />
                 </VStack> :
                 <VStack space={4} p="10" alignContent="center">
-                    <View>
+                    <View alignItems="center">
                         <StatusBar style="auto" />
                         <FlatList
+                            
                             data={products}
                             onRefresh={fetchPosts}
                             refreshing={refreshing}
